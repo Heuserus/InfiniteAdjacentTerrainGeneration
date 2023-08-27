@@ -9,7 +9,11 @@ https://github.com/andreas128/RePaint
 https://github.com/victorca25/traiNNer/tree/master
 https://github.com/victorca25/iNNfer
 
-If you do not wish to train your own models, in ./models are 4 pretrained ones.
+If you do not wish to train your own models, download the Models.zip file from here:
+
+https://drive.google.com/file/d/1AlpCfDimwXjHwVMuHpr5LdYFyeHbZldH/view?usp=sharing
+
+and unpack it into the ./models folder
 
 
 ## Obtaining the Dataset
