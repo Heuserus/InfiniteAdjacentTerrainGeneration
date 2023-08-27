@@ -5,8 +5,11 @@ with Image Outpainting.
 You might have to do certain neccessary setup steps for the 4 repos used in this method.
 
 https://github.com/openai/guided-diffusion
+
 https://github.com/andreas128/RePaint
+
 https://github.com/victorca25/traiNNer/tree/master
+
 https://github.com/victorca25/iNNfer
 
 If you do not wish to train your own models, download the Models.zip file from here:
