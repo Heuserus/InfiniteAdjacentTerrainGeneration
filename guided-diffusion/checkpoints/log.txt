@@ -1,0 +1,6 @@
+Logging to ./checkpoints
+creating model and diffusion...
+sampling...
+created 16 samples
+saving to ./samples\samples_16x64x64x3.npz
+sampling complete

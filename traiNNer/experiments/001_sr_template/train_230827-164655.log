@@ -1,0 +1,179 @@
+23-08-27 16:46:55.137 - INFO:   name: 001_sr_template
+  use_tb_logger: True
+  model: sr
+  scale: 4
+  gpu_ids: [0]
+  use_amp: True
+  use_swa: False
+  use_cem: False
+  use_atg: False
+  datasets:[
+    train:[
+      name: DIV2K
+      mode: aligned
+      dataroot_HR: /home/stud/b/bh070/Batch256
+      dataroot_LR: /home/stud/b/bh070/Batch64
+      subset_file: None
+      use_shuffle: True
+      znorm: False
+      n_workers: 4
+      batch_size: 8
+      virtual_batch_size: 8
+      preprocess: crop
+      crop_size: 256
+      image_channels: 3
+      use_flip: True
+      use_rot: True
+      use_hrrot: False
+      phase: train
+      scale: 4
+      data_type: img
+      aug_configs:[
+        lr_downscale_types:[
+          resize:[
+            resize_prob:[
+              down: 1.0
+            ]
+            resize_range_up: [1, 1.5]
+            resize_range_down: [0.15, 1]
+            down_up_min: 0.5
+          ]
+        ]
+      ]
+      shuffle_degradations: False
+      lr_downscale: True
+      lr_downscale_types: [773, 777]
+      resize_strat: pre
+    ]
+    val:[
+      name: val_set14_part
+      mode: aligned
+      dataroot_B: /home/stud/b/bh070/Val256
+      dataroot_A: /home/stud/b/bh070/Val64
+      znorm: False
+      lr_downscale: False
+      lr_downscale_types: [773, 777]
+      phase: val
+      scale: 4
+      data_type: img
+      resize_strat: pre
+    ]
+  ]
+  path:[
+    root: ..
+    experiments_root: ../experiments/001_sr_template
+    models: ../experiments/001_sr_template/models
+    training_state: ../experiments/001_sr_template/training_state
+    log: ../experiments/001_sr_template
+    val_images: ../experiments/001_sr_template/val_images
+  ]
+  train:[
+    optim_G: adam
+    optim_D: adam
+    lr_scheme: MultiStepLR
+    lr_gamma: 0.5
+    swa_lr: 0.0001
+    swa_anneal_epochs: 10
+    swa_anneal_strategy: cos
+    pixel_criterion: l1
+    pixel_weight: 0.01
+    feature_criterion: l1
+    feature_weight: 1
+    gan_type: vanilla
+    gan_weight: 0.005
+    manual_seed: 0
+    niter: 500000.0
+    val_freq: 5000.0
+    metrics: psnr,ssim,lpips
+    grad_clip: norm
+    grad_clip_value: 0.1
+    overwrite_val_imgs: None
+    val_comparison: None
+    lr_steps: [50000, 100000, 200000, 300000]
+    swa_start_iter: 375000
+    atg_start_iter: 415000
+  ]
+  logger:[
+    print_freq: 200
+    save_checkpoint_freq: 5000.0
+    overwrite_chkp: False
+  ]
+  is_train: True
+  network_G:[
+    strict: False
+    type: rrdb_net
+    norm_type: None
+    mode: CNA
+    nf: 64
+    nb: 23
+    nr: 3
+    in_nc: 3
+    out_nc: 3
+    gc: 32
+    convtype: Conv2D
+    act_type: leakyrelu
+    gaussian_noise: True
+    plus: False
+    finalact: None
+    upscale: 4
+    upsample_mode: upconv
+  ]
+  network_D:[
+    strict: True
+    type: discriminator_vgg
+    in_nc: 3
+    base_nf: 64
+    norm_type: batch
+    mode: CNA
+    act_type: leakyrelu
+    convtype: Conv2D
+    arch: ESRGAN
+    size: 256
+  ]
+
+23-08-27 16:46:55.252 - INFO: Random seed: 0
+23-08-27 16:47:06.545 - INFO: Dataset [AlignedDataset - DIV2K] is created.
+23-08-27 16:47:06.546 - INFO: Number of train images: 186,693, epoch iters: 23,336
+23-08-27 16:47:06.546 - INFO: Total epochs needed: 22 for iters 500,000
+23-08-27 16:47:06.576 - INFO: Dataset [AlignedDataset - val_set14_part] is created.
+23-08-27 16:47:06.576 - INFO: Number of val images in [val_set14_part]: 3,000
+23-08-27 16:47:06.600 - INFO: AMP library available
+23-08-27 16:47:08.131 - INFO: Initialization method [kaiming]
+23-08-27 16:47:08.589 - INFO: Initialization method [kaiming]
+23-08-27 16:47:10.357 - INFO: GAN enabled
+23-08-27 16:47:10.363 - INFO: AMP enabled
+23-08-27 16:47:10.363 - INFO: norm gradient clip enabled. Clip value: 0.1.
+23-08-27 16:47:10.372 - INFO: Network G structure: DataParallel - RRDBNet, with parameters: 16,697,987
+23-08-27 16:47:10.373 - INFO: Network D structure: DataParallel - Discriminator_VGG, with parameters: 21,058,953
+23-08-27 16:47:10.373 - INFO: Model [SRModel] created.
+23-08-27 16:47:10.373 - INFO: Start training from epoch: 0, iter: 0
+23-08-27 16:48:17.551 - INFO: <epoch:  0, iter:     200, lr:1.000e-04, t:-1.0000s, td:0.0020s, eta:0.0000h> pix-l1: 1.9511e-05 fea-vgg19-l1: 1.7265e-02 l_g_gan: 1.4792e-02 l_d_real: 1.0932e-01 l_d_fake: 7.7563e-02 D_real: -3.1426e+00 D_fake: -6.0078e+00 
+23-08-27 16:49:22.288 - INFO: <epoch:  0, iter:     400, lr:1.000e-04, t:-1.0000s, td:0.0001s, eta:0.0000h> pix-l1: 1.9737e-05 fea-vgg19-l1: 1.6329e-02 l_g_gan: 6.0218e-03 l_d_real: 6.1377e-01 l_d_fake: 7.7519e-01 D_real: 4.1836e+00 D_fake: 3.6738e+00 
+23-08-27 16:50:27.440 - INFO: <epoch:  0, iter:     600, lr:1.000e-04, t:64.7360s, td:0.0001s, eta:8980.3240h> pix-l1: 1.0919e-05 fea-vgg19-l1: 7.7787e-03 l_g_gan: 3.6990e-03 l_d_real: 6.7313e-01 l_d_fake: 6.6591e-01 D_real: 8.7061e-01 D_fake: 8.0029e-01 
+23-08-27 16:51:31.491 - INFO: <epoch:  0, iter:     800, lr:1.000e-04, t:65.1518s, td:0.0001s, eta:9034.3807h> pix-l1: 4.1849e-06 fea-vgg19-l1: 5.3125e-03 l_g_gan: 3.4522e-03 l_d_real: 7.0032e-01 l_d_fake: 7.0012e-01 D_real: -7.2559e-01 D_fake: -7.1582e-01 
+23-08-27 16:52:34.464 - INFO: <epoch:  0, iter:   1,000, lr:1.000e-04, t:64.0516s, td:0.0001s, eta:8878.2614h> pix-l1: 1.6625e-05 fea-vgg19-l1: 1.0819e-02 l_g_gan: 3.6512e-03 l_d_real: 6.5914e-01 l_d_fake: 6.5899e-01 D_real: 1.9805e+00 D_fake: 1.9092e+00 
+23-08-27 16:53:37.395 - INFO: <epoch:  0, iter:   1,200, lr:1.000e-04, t:62.9732s, td:0.0001s, eta:8725.2872h> pix-l1: 1.2716e-05 fea-vgg19-l1: 9.2997e-03 l_g_gan: 3.3876e-03 l_d_real: 7.1263e-01 l_d_fake: 7.1286e-01 D_real: 6.8701e-01 D_fake: 7.2217e-01 
+23-08-27 16:54:40.516 - INFO: <epoch:  0, iter:   1,400, lr:1.000e-04, t:62.9304s, td:0.0001s, eta:8715.8586h> pix-l1: 8.8523e-06 fea-vgg19-l1: 7.1450e-03 l_g_gan: 3.5181e-03 l_d_real: 6.8459e-01 l_d_fake: 6.8427e-01 D_real: 3.3325e-01 D_fake: 3.1396e-01 
+23-08-27 16:55:43.224 - INFO: <epoch:  0, iter:   1,600, lr:1.000e-04, t:63.1211s, td:0.0001s, eta:8738.7626h> pix-l1: 2.8915e-06 fea-vgg19-l1: 5.3074e-03 l_g_gan: 3.4640e-03 l_d_real: 6.9765e-01 l_d_fake: 6.9745e-01 D_real: -1.8201e-01 D_fake: -1.7725e-01 
+23-08-27 16:56:46.384 - INFO: <epoch:  0, iter:   1,800, lr:1.000e-04, t:62.7085s, td:0.0001s, eta:8678.1600h> pix-l1: 3.3052e-06 fea-vgg19-l1: 7.3761e-03 l_g_gan: 3.4510e-03 l_d_real: 6.9800e-01 l_d_fake: 6.9818e-01 D_real: 6.6748e-01 D_fake: 6.7529e-01 
+23-08-27 16:57:49.444 - INFO: <epoch:  0, iter:   2,000, lr:1.000e-04, t:63.1599s, td:0.0001s, eta:8737.1152h> pix-l1: 3.5428e-06 fea-vgg19-l1: 4.8464e-03 l_g_gan: 3.5383e-03 l_d_real: 6.8055e-01 l_d_fake: 6.8019e-01 D_real: 6.1328e-01 D_fake: 5.8594e-01 
+23-08-27 16:58:52.657 - INFO: <epoch:  0, iter:   2,200, lr:1.000e-04, t:63.0598s, td:0.0001s, eta:8719.7722h> pix-l1: 2.2275e-06 fea-vgg19-l1: 5.0942e-03 l_g_gan: 3.4996e-03 l_d_real: 6.8767e-01 l_d_fake: 6.8748e-01 D_real: 3.2990e-02 D_fake: 2.0660e-02 
+23-08-27 16:59:56.000 - INFO: <epoch:  0, iter:   2,400, lr:1.000e-04, t:63.2133s, td:0.0001s, eta:8737.4776h> pix-l1: 3.1336e-06 fea-vgg19-l1: 6.8028e-03 l_g_gan: 3.3460e-03 l_d_real: 7.1839e-01 l_d_fake: 7.1791e-01 D_real: -1.2031e+00 D_fake: -1.1543e+00 
+23-08-27 17:00:59.041 - INFO: <epoch:  0, iter:   2,600, lr:1.000e-04, t:63.3422s, td:0.0001s, eta:8751.7862h> pix-l1: 2.6764e-06 fea-vgg19-l1: 5.6700e-03 l_g_gan: 3.4915e-03 l_d_real: 6.9045e-01 l_d_fake: 6.9078e-01 D_real: -1.4229e+00 D_fake: -1.4307e+00 
+23-08-27 17:02:02.304 - INFO: <epoch:  0, iter:   2,800, lr:1.000e-04, t:63.0413s, td:0.0001s, eta:8706.7037h> pix-l1: 6.2160e-06 fea-vgg19-l1: 8.9646e-03 l_g_gan: 3.3689e-03 l_d_real: 7.1592e-01 l_d_fake: 7.1552e-01 D_real: 1.4102e+00 D_fake: 1.4521e+00 
+23-08-27 17:03:05.392 - INFO: <epoch:  0, iter:   3,000, lr:1.000e-04, t:63.2628s, td:0.0001s, eta:8733.7765h> pix-l1: 5.7058e-06 fea-vgg19-l1: 5.2868e-03 l_g_gan: 3.4889e-03 l_d_real: 6.9156e-01 l_d_fake: 6.9131e-01 D_real: 2.3291e-01 D_fake: 2.2656e-01 
+23-08-27 17:04:08.795 - INFO: <epoch:  0, iter:   3,200, lr:1.000e-04, t:63.0880s, td:0.0001s, eta:8706.1427h> pix-l1: 4.2289e-06 fea-vgg19-l1: 5.3325e-03 l_g_gan: 3.5163e-03 l_d_real: 6.8471e-01 l_d_fake: 6.8465e-01 D_real: 5.2686e-01 D_fake: 5.0830e-01 
+23-08-27 17:05:11.832 - INFO: <epoch:  0, iter:   3,400, lr:1.000e-04, t:63.4037s, td:0.0001s, eta:8746.1898h> pix-l1: 3.9616e-06 fea-vgg19-l1: 6.6798e-03 l_g_gan: 3.4798e-03 l_d_real: 6.9512e-01 l_d_fake: 6.9490e-01 D_real: -6.3896e-05 D_fake: -1.0242e-03 
+23-08-27 17:06:14.749 - INFO: <epoch:  0, iter:   3,600, lr:1.000e-04, t:63.0371s, td:0.0001s, eta:8692.1187h> pix-l1: 3.5237e-06 fea-vgg19-l1: 5.3362e-03 l_g_gan: 3.4792e-03 l_d_real: 6.9264e-01 l_d_fake: 6.9300e-01 D_real: 2.9373e-02 D_fake: 2.6352e-02 
+23-08-27 17:07:17.657 - INFO: <epoch:  0, iter:   3,800, lr:1.000e-04, t:62.9166s, td:0.0001s, eta:8672.0004h> pix-l1: 3.3810e-06 fea-vgg19-l1: 7.6342e-03 l_g_gan: 3.4485e-03 l_d_real: 6.9708e-01 l_d_fake: 6.9697e-01 D_real: 7.6355e-02 D_fake: 8.3679e-02 
+23-08-27 17:08:20.750 - INFO: <epoch:  0, iter:   4,000, lr:1.000e-04, t:62.9080s, td:0.0001s, eta:8667.3207h> pix-l1: 2.0882e-06 fea-vgg19-l1: 3.7734e-03 l_g_gan: 3.4811e-03 l_d_real: 6.9049e-01 l_d_fake: 6.9051e-01 D_real: 2.2778e-01 D_fake: 2.2205e-01 
+23-08-27 17:09:23.523 - INFO: <epoch:  0, iter:   4,200, lr:1.000e-04, t:63.0931s, td:0.0001s, eta:8689.3188h> pix-l1: 3.0514e-06 fea-vgg19-l1: 4.9310e-03 l_g_gan: 3.4741e-03 l_d_real: 6.9186e-01 l_d_fake: 6.9193e-01 D_real: 3.1396e-01 D_fake: 3.1104e-01 
+23-08-27 17:10:26.405 - INFO: <epoch:  0, iter:   4,400, lr:1.000e-04, t:62.7728s, td:0.0001s, eta:8641.7218h> pix-l1: 6.4505e-06 fea-vgg19-l1: 5.7482e-03 l_g_gan: 3.4739e-03 l_d_real: 6.9207e-01 l_d_fake: 6.9207e-01 D_real: -3.4448e-01 D_fake: -3.4717e-01 
+23-08-27 17:11:29.565 - INFO: <epoch:  0, iter:   4,600, lr:1.000e-04, t:62.8822s, td:0.0001s, eta:8653.2959h> pix-l1: 3.1840e-06 fea-vgg19-l1: 4.3658e-03 l_g_gan: 3.5226e-03 l_d_real: 6.8502e-01 l_d_fake: 6.8498e-01 D_real: -3.1055e-01 D_fake: -3.3008e-01 
+23-08-27 17:12:31.941 - INFO: <epoch:  0, iter:   4,800, lr:1.000e-04, t:63.1596s, td:0.0001s, eta:8687.9516h> pix-l1: 2.8239e-06 fea-vgg19-l1: 4.0137e-03 l_g_gan: 3.4865e-03 l_d_real: 6.8946e-01 l_d_fake: 6.8953e-01 D_real: 2.7124e-01 D_fake: 2.6343e-01 
+23-08-27 17:13:34.836 - INFO: <epoch:  0, iter:   5,000, lr:1.000e-04, t:62.3760s, td:0.0001s, eta:8576.7040h> pix-l1: 2.9829e-06 fea-vgg19-l1: 6.3149e-03 l_g_gan: 3.4712e-03 l_d_real: 6.9226e-01 l_d_fake: 6.9226e-01 D_real: 6.0242e-02 D_fake: 5.8258e-02 
+23-08-27 17:13:39.394 - INFO: Models and training states saved at epoch:  0, iter:   5,000. 
+23-08-27 17:21:41.696 - INFO: # Validation # PSNR: inf, SSIM: 0.83468, LPIPS: 0.15981
+23-08-27 17:21:41.697 - INFO: <epoch:  0, iter:   5,000> PSNR: inf, SSIM: 0.83468, LPIPS: 0.15981
+23-08-27 17:21:41.697 - WARNING: NaN or Inf found in input tensor.
+23-08-27 17:22:44.400 - INFO: <epoch:  0, iter:   5,200, lr:1.000e-04, t:62.8950s, td:0.0001s, eta:8644.5703h> pix-l1: 3.5749e-06 fea-vgg19-l1: 7.6560e-03 l_g_gan: 3.2168e-03 l_d_real: 7.4749e-01 l_d_fake: 7.4726e-01 D_real: 4.1211e-01 D_fake: 5.1611e-01 
