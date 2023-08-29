@@ -71,14 +71,24 @@ Then inside ./iNNfer ,you call **python all.py** after the upsampling is done, s
 
 Only some of the scripts are my onw work. Most of the code belongs to the owners of their respective repositories.
 These scripts are my own work:
+
 to64.py
+
 to8bit.py
+
 terranize.py
+
 slicing.py
+
 RePaint/outpaintAll.py
+
 RePaint/chunkgen.py
+
 RePaint/combine.py
+
 guided-diffusion/sampleout.py
+
 iNNfer/stitch.py
+
 iNNfer/all.py
 
